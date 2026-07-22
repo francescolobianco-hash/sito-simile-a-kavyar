@@ -8,6 +8,9 @@ export async function enrollAction(courseId: string) {
   const session = await auth();
   if (!session?.user) throw new Error("Non autenticato");
 
+  const course = await prisma.course.findUnique({ where: { id: courseId } });
+  if (!course || !course.published) throw new Error("Corso non disponibile");
+
   await prisma.enrollment.upsert({
     where: { userId_courseId: { userId: session.user.id, courseId } },
     update: {},

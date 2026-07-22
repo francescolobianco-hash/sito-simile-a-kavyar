@@ -20,6 +20,49 @@ async function assertCourseOwner(courseId: string, userId: string, isAdmin: bool
   return course;
 }
 
+// The following helpers authorize a mutation using the resource's *actual*
+// parent course (via its DB relations), never a client-supplied courseId.
+// This prevents a teacher from operating on another teacher's module,
+// lesson, quiz or question by pairing their own courseId with someone
+// else's resource id.
+
+async function assertOwnedModule(moduleId: string, userId: string, isAdmin: boolean) {
+  const mod = await prisma.module.findUnique({ where: { id: moduleId }, include: { course: true } });
+  if (!mod) throw new Error("Modulo non trovato");
+  if (!isAdmin && mod.course.teacherId !== userId) throw new Error("Non autorizzato");
+  return mod;
+}
+
+async function assertOwnedLesson(lessonId: string, userId: string, isAdmin: boolean) {
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    include: { module: { include: { course: true } } },
+  });
+  if (!lesson) throw new Error("Lezione non trovata");
+  if (!isAdmin && lesson.module.course.teacherId !== userId) throw new Error("Non autorizzato");
+  return lesson;
+}
+
+async function assertOwnedQuiz(quizId: string, userId: string, isAdmin: boolean) {
+  const quiz = await prisma.quiz.findUnique({
+    where: { id: quizId },
+    include: { module: { include: { course: true } } },
+  });
+  if (!quiz) throw new Error("Quiz non trovato");
+  if (!isAdmin && quiz.module.course.teacherId !== userId) throw new Error("Non autorizzato");
+  return quiz;
+}
+
+async function assertOwnedQuestion(questionId: string, userId: string, isAdmin: boolean) {
+  const question = await prisma.question.findUnique({
+    where: { id: questionId },
+    include: { quiz: { include: { module: { include: { course: true } } } } },
+  });
+  if (!question) throw new Error("Domanda non trovata");
+  if (!isAdmin && question.quiz.module.course.teacherId !== userId) throw new Error("Non autorizzato");
+  return question;
+}
+
 function slugify(title: string) {
   return (
     title
@@ -99,14 +142,15 @@ export async function addModuleAction(courseId: string, formData: FormData) {
 
 export async function deleteModuleAction(moduleId: string, courseId: string) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const mod = await assertOwnedModule(moduleId, user.id, user.role === "ADMIN");
   await prisma.module.delete({ where: { id: moduleId } });
+  revalidatePath(`/teacher/courses/${mod.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }
 
 export async function addLessonAction(moduleId: string, courseId: string, formData: FormData) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const mod = await assertOwnedModule(moduleId, user.id, user.role === "ADMIN");
 
   const count = await prisma.lesson.count({ where: { moduleId } });
   await prisma.lesson.create({
@@ -120,43 +164,48 @@ export async function addLessonAction(moduleId: string, courseId: string, formDa
     },
   });
 
+  revalidatePath(`/teacher/courses/${mod.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }
 
 export async function deleteLessonAction(lessonId: string, courseId: string) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const lesson = await assertOwnedLesson(lessonId, user.id, user.role === "ADMIN");
   await prisma.lesson.delete({ where: { id: lessonId } });
+  revalidatePath(`/teacher/courses/${lesson.module.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }
 
 export async function addQuizAction(moduleId: string, courseId: string, formData: FormData) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const mod = await assertOwnedModule(moduleId, user.id, user.role === "ADMIN");
 
   await prisma.quiz.create({
     data: { title: formData.get("title") as string, moduleId },
   });
 
+  revalidatePath(`/teacher/courses/${mod.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }
 
 export async function deleteQuizAction(quizId: string, courseId: string) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const quiz = await assertOwnedQuiz(quizId, user.id, user.role === "ADMIN");
   await prisma.quiz.delete({ where: { id: quizId } });
+  revalidatePath(`/teacher/courses/${quiz.module.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }
 
 export async function addQuestionAction(quizId: string, courseId: string, formData: FormData) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const quiz = await assertOwnedQuiz(quizId, user.id, user.role === "ADMIN");
 
   const text = formData.get("text") as string;
   const correctIndex = Number(formData.get("correctIndex"));
-  const options = [0, 1, 2, 3]
-    .map((i) => (formData.get(`option${i}`) as string)?.trim())
-    .filter(Boolean);
+  const rawOptions = [0, 1, 2, 3].map((i) => ((formData.get(`option${i}`) as string) ?? "").trim());
+  const options = rawOptions
+    .map((optText, i) => ({ text: optText, isCorrect: i === correctIndex }))
+    .filter((opt) => opt.text.length > 0);
 
   const count = await prisma.question.count({ where: { quizId } });
   await prisma.question.create({
@@ -165,17 +214,19 @@ export async function addQuestionAction(quizId: string, courseId: string, formDa
       order: count,
       quizId,
       answers: {
-        create: options.map((opt, i) => ({ text: opt, isCorrect: i === correctIndex })),
+        create: options,
       },
     },
   });
 
+  revalidatePath(`/teacher/courses/${quiz.module.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }
 
 export async function deleteQuestionAction(questionId: string, courseId: string) {
   const user = await requireTeacher();
-  await assertCourseOwner(courseId, user.id, user.role === "ADMIN");
+  const question = await assertOwnedQuestion(questionId, user.id, user.role === "ADMIN");
   await prisma.question.delete({ where: { id: questionId } });
+  revalidatePath(`/teacher/courses/${question.quiz.module.courseId}/edit`);
   revalidatePath(`/teacher/courses/${courseId}/edit`);
 }

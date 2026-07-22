@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { updateUserRoleAction } from "@/lib/actions/admin";
@@ -10,6 +11,11 @@ const roleLabel: Record<string, string> = {
 
 export default async function AdminUsersPage() {
   const session = await auth();
+  // Re-check the role here (using the DB-refreshed session) rather than
+  // relying solely on the middleware redirect, which decodes a JWT that
+  // can lag behind a just-revoked role until it is next refreshed.
+  if (session?.user.role !== "ADMIN") redirect("/dashboard");
+
   const users = await prisma.user.findMany({
     include: {
       _count: { select: { enrollments: true, coursesTaught: true } },

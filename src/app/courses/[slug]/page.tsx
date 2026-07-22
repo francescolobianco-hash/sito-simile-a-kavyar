@@ -31,6 +31,12 @@ export default async function CourseDetailPage({
 
   if (!course) notFound();
 
+  const isCourseOwnerOrAdmin =
+    !!session &&
+    (session.user.role === "ADMIN" ||
+      (session.user.role === "TEACHER" && session.user.id === course.teacherId));
+  if (!course.published && !isCourseOwnerOrAdmin) notFound();
+
   let isEnrolled = false;
   let completedLessonIds = new Set<string>();
   const quizAttempts = new Map<string, number>();
