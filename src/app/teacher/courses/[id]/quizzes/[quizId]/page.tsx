@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { ConfirmForm } from "@/components/teacher/ConfirmForm";
 import { addQuestionAction, deleteQuestionAction } from "@/lib/actions/teacher";
+import { GenerateAIForm } from "./GenerateAIForm";
 
 export default async function ManageQuizPage({
   params,
@@ -61,6 +62,8 @@ export default async function ManageQuizPage({
           </div>
         ))}
       </div>
+
+      <GenerateAIForm quizId={quizId} courseId={id} />
 
       <form
         action={addQuestionAction.bind(null, quizId, id)}
