@@ -28,13 +28,19 @@ export async function registerAction(_prevState: string | undefined, formData: F
     return "Esiste già un account con questa email.";
   }
 
+  // Bootstrap: on a fresh deployment with no users yet, the first person
+  // to register becomes ADMIN so there's someone able to manage the
+  // platform without needing direct database access.
+  const userCount = await prisma.user.count();
+  const assignedRole = userCount === 0 ? "ADMIN" : role;
+
   const passwordHash = await bcrypt.hash(password, 10);
   await prisma.user.create({
     data: {
       name,
       email,
       passwordHash,
-      role,
+      role: assignedRole,
       avatarColor: PALETTE[Math.floor(Math.random() * PALETTE.length)],
     },
   });
