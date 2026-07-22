@@ -16,7 +16,7 @@ export default async function CoursesPage({
     where: {
       published: true,
       ...(category ? { category } : {}),
-      ...(q ? { title: { contains: q } } : {}),
+      ...(q ? { title: { contains: q, mode: "insensitive" } } : {}),
     },
     include: {
       teacher: true,
