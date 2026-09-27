@@ -1,75 +1,77 @@
 # Stop Slop
 
-Rules for anyone (human or AI agent) writing copy, docs, code, or UI in this repo.
-"Slop" is output that looks plausible but is generic, padded, or unverified.
-If a sentence, component, or function could be pasted into any other project unchanged, it probably is slop.
+Regole per chiunque (persona o agente AI) scriva testi, documentazione, codice o interfacce in questo repo.
+Lo "slop" è un output che sembra plausibile ma è generico, gonfiato o non verificato.
+Se una frase, un componente o una funzione si potrebbe incollare così com'è in qualsiasi altro progetto, probabilmente è slop.
 
-## Prose
+## Testi
 
-### Banned words and phrases
+### Parole ed espressioni vietate
 
-Cut these on sight. There is almost always a plainer word, or no word needed.
+Tagliale appena le vedi. Quasi sempre esiste una parola più semplice, oppure non serve nessuna parola.
 
-- delve, dive into, deep dive, unpack, navigate (figuratively), embark, journey
-- tapestry, landscape, realm, ecosystem, testament, beacon, symphony
-- seamless, robust, cutting-edge, state-of-the-art, game-changer, revolutionize, elevate, empower, unlock, unleash, supercharge
-- leverage (use "use"), utilize (use "use"), facilitate (use "help"/"let")
-- "It's important to note that", "It's worth mentioning", "Notably,"
-- "In today's fast-paced world", "In the ever-evolving world of…"
-- "Whether you're a … or a …"
-- "Let's dive in", "Without further ado", "Buckle up"
-- "In conclusion", "To sum up", "Ultimately," as a paragraph opener
-- "Great question!", "Absolutely!", "Certainly!", "I hope this helps"
-- "not just X, but Y" / "It's not X — it's Y" (the fake-contrast reveal)
+- immergiamoci, addentriamoci, approfondiamo, esploriamo insieme, viaggio (in senso figurato)
+- panorama, ecosistema, universo, mondo (come in "nel mondo della fotografia"), testimonianza, faro, sinfonia
+- senza soluzione di continuità, fluido, robusto, all'avanguardia, rivoluzionario, innovativo, game-changer
+- elevare, potenziare, sbloccare, liberare il potenziale, dare vita a, portare al livello successivo
+- sfruttare / avvalersi di / utilizzare (scrivi "usare"), facilitare (scrivi "aiutare" o "permettere")
+- "È importante notare che", "Vale la pena sottolineare", "Degno di nota"
+- "Nel mondo frenetico di oggi", "Nel panorama in continua evoluzione di…"
+- "Che tu sia un … o un …"
+- "Senza ulteriori indugi", "Allacciate le cinture", "Partiamo!"
+- "In conclusione", "Per riassumere", "In definitiva" all'inizio di un paragrafo
+- "Ottima domanda!", "Assolutamente!", "Certamente!", "Spero ti sia utile"
+- "non solo X, ma anche Y" / "Non è X: è Y" (il finto colpo di scena)
 
-### Banned structures
+### Strutture vietate
 
-- **Rule of three by reflex.** "Fast, reliable, and scalable." List two things if there are two.
-- **Em-dash chains.** One per paragraph at most. Prefer a period.
-- **Rhetorical question openers.** "Ever wondered how…?" State the point.
-- **Summary restating the paragraph above it.** Delete the summary.
-- **Hedging stacks.** "might potentially help to possibly improve". Pick one qualifier or none.
-- **Emoji bullets and headings** in docs and UI copy. No 🚀 ✨ 💡 ✅.
-- **Bold on every other phrase.** Bold only what a skimmer must not miss.
-- **Headings for three-line sections.** Use a paragraph.
+- **Tre elementi per riflesso.** "Veloce, affidabile e scalabile." Se le cose sono due, elencane due.
+- **Catene di trattini lunghi (—).** Al massimo uno per paragrafo. Meglio un punto.
+- **Domande retoriche in apertura.** "Ti sei mai chiesto come…?" Vai dritto al punto.
+- **Riassunti che ripetono il paragrafo precedente.** Cancella il riassunto.
+- **Cautele accumulate.** "potrebbe forse contribuire a migliorare eventualmente". Un solo condizionale, o nessuno.
+- **Emoji in elenchi e titoli** di documentazione e interfaccia. Niente 🚀 ✨ 💡 ✅.
+- **Grassetto ovunque.** Solo su ciò che chi legge in fretta non deve perdere.
+- **Titoli per sezioni di tre righe.** Usa un paragrafo.
+- **Anglicismi inutili.** "Fare il submit", "customizzare", "performante": esiste l'italiano. Tieni solo i termini di settore davvero in uso (vedi sotto).
 
-### What to do instead
+### Cosa fare invece
 
-- Lead with the fact, the number, or the action. Context after, if needed.
-- Use concrete nouns: "photographers submit up to 10 images per call" beats "creatives can showcase their work".
-- Write the way you would explain it to a colleague at the next desk.
-- Shorter is better when nothing is lost. Read it once more and cut a sentence.
+- Parti dal fatto, dal numero o dall'azione. Il contesto dopo, se serve.
+- Usa sostantivi concreti: "i fotografi inviano fino a 10 immagini per call" è meglio di "i creativi possono mettere in mostra il loro lavoro".
+- Scrivi come lo spiegheresti a un collega alla scrivania accanto.
+- Più corto è meglio, se non si perde nulla. Rileggi una volta e taglia una frase.
 
-## Product copy (portfolio / submission platform)
+## Testi del prodotto (piattaforma di portfolio e invio lavori)
 
-This site connects photographers, models, stylists, and MUAs with magazines that publish their work. Copy should sound like it was written by people in that industry.
+Il sito mette in contatto fotografi, modelle e modelli, stylist e truccatori con le riviste che pubblicano il loro lavoro. I testi devono sembrare scritti da persone del settore.
 
-- Name real things: "submission", "credits", "tear sheet", "editorial", "open call", "deadline", "fee", "acceptance rate".
-- Show numbers when we have them (deadline dates, fees, response time). Don't invent them.
-- No placeholder testimonials, fake user counts, or made-up publication logos. Leave a visible `TODO` instead.
-- Error and empty states say what happened and what to do next: "No open calls match 'bridal'. Clear the filter to see all 42."
+- Chiama le cose col loro nome: "invio", "crediti", "tear sheet", "editoriale", "open call", "scadenza", "quota", "tasso di accettazione".
+- Mostra i numeri quando li abbiamo (date di scadenza, quote, tempi di risposta). Non inventarli.
+- Niente testimonianze segnaposto, numeri di utenti inventati o loghi di riviste finti. Lascia un `TODO` visibile.
+- Gli stati di errore e vuoti dicono cosa è successo e cosa fare: "Nessuna open call corrisponde a 'sposa'. Rimuovi il filtro per vederle tutte e 42."
 
-## Code
+## Codice
 
-- **No speculative abstractions.** No `BaseService`, `Manager`, `Helper`, or config layer until there is a second caller.
-- **No comments that restate the code.** `// increment counter` above `count++` gets deleted. Comment the *why*.
-- **No dead scaffolding.** Remove unused imports, commented-out blocks, `console.log`, and empty `try/catch` before committing.
-- **No invented APIs.** If you're not sure a function, package, or option exists, check the docs or the source. Don't guess and move on.
-- **No silent error swallowing.** `catch (e) {}` is a bug.
-- **Match the surrounding code** in naming, structure, and comment density, even if you'd do it differently.
-- **Every claim in a PR description is verified.** "Tested locally" means you ran it. Say what you ran.
+- **Niente astrazioni preventive.** Nessun `BaseService`, `Manager`, `Helper` o livello di configurazione finché non c'è un secondo chiamante.
+- **Niente commenti che ripetono il codice.** `// incrementa il contatore` sopra `count++` va cancellato. Commenta il *perché*.
+- **Niente impalcature morte.** Togli import inutilizzati, blocchi commentati, `console.log` e `try/catch` vuoti prima del commit.
+- **Niente API inventate.** Se non sei sicuro che una funzione, un pacchetto o un'opzione esista, controlla la documentazione o il sorgente. Non tirare a indovinare.
+- **Niente errori ingoiati in silenzio.** `catch (e) {}` è un bug.
+- **Adeguati al codice circostante** per nomi, struttura e densità dei commenti, anche se tu faresti diversamente.
+- **Ogni affermazione nella descrizione di una PR è verificata.** "Testato in locale" significa che l'hai eseguito. Scrivi cosa hai eseguito.
 
-## UI and design
+## Interfaccia e design
 
-- No default purple-to-blue gradients, glassmorphism cards, or floating blobs as decoration.
-- No stock "diverse team laughing at laptop" imagery. The work on the platform *is* the imagery.
-- Photos are the product: let them be large, uncropped where possible, and never covered by text overlays.
-- One accent color, used for actions. Everything else is neutral.
-- Lorem ipsum never ships. Real or clearly marked placeholder content only.
+- Niente sfumature viola-blu di default, card in stile glassmorphism o macchie fluttuanti come decorazione.
+- Niente foto stock di "team eterogeneo che ride davanti al portatile". Le immagini della piattaforma *sono* il lavoro degli utenti.
+- Le foto sono il prodotto: grandi, non ritagliate dove possibile, mai coperte da testo in sovrimpressione.
+- Un solo colore d'accento, usato per le azioni. Tutto il resto neutro.
+- Il lorem ipsum non va mai in produzione. Solo contenuti reali o segnaposto chiaramente indicati.
 
-## Self-check before you commit
+## Controllo prima del commit
 
-1. Search your diff for the banned words above.
-2. Delete the first and last sentence of each paragraph you wrote. Did it get worse? If not, keep them deleted.
-3. Could this text or component appear unchanged on any other website? Rewrite it so it couldn't.
-4. Is every fact, number, and API call something you checked?
+1. Cerca nel tuo diff le parole vietate elencate sopra.
+2. Elimina la prima e l'ultima frase di ogni paragrafo che hai scritto. È peggiorato? Se no, lasciale eliminate.
+3. Questo testo o componente potrebbe comparire identico su un altro sito? Riscrivilo in modo che non possa.
+4. Ogni fatto, numero e chiamata API è qualcosa che hai verificato?
